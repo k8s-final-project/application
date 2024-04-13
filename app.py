@@ -20,8 +20,8 @@ AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_SESSION_TOKEN = os.environ.get('AWS_SESSION_TOKEN')
 
 
-bucket_name = 'bucket-k8s-final-project'
-key = 'bg1.jpg'
+bucket_name = os.environ.get("BUCKETNAME") or "bucket-k8s-final-project"
+key = os.environ.get("KEY") or "bg1.jpg"
 
 # Create a connection to the MySQL database
 db_conn = connections.Connection(
