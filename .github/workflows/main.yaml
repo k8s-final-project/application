@@ -30,18 +30,33 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: my_db
-          IMAGE_TAG: v2
+          IMAGE_TAG: v1
         run: |
           echo "Building MySQL image..."
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f Dockerfile_mysql .
+          # unit test
+          docker run -d --name mydb -e MYSQL_ROOT_PASSWORD=pw $REGISTRY/my_db:v1
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: Build, tag, and push WebServer image to Amazon ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: my_app
-          IMAGE_TAG: v2
+          IMAGE_TAG: v1
         run: |
           echo "Building Webserver image..."
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f Dockerfile .
+
+          # unit test
+          export DBHOST=172.17.0.2
+          export DBPORT=3306
+          export DBUSER=root
+          export DATABASE=employees
+          export DBPWD=pw
+
+          docker run -d -p 8081:8080 --name myapp -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e DBUSER=$DBUSER -e DBPWD=$DBPWD $REGISTRY/my_app:v1
+          docker ps
+          echo "Pause for 10 seconds to let container start"
+          sleep 10
+          curl localhos:8081 -vvv
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
