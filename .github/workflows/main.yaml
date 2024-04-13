@@ -65,5 +65,5 @@ jobs:
           echo "Pause for 10 seconds to let container start"
           sleep 10
           docker logs myapp
-          curl localhost:8081 -vvv
+          curl localhost:81 -vvv
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
