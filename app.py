@@ -17,10 +17,11 @@ DBPORT = int(os.environ.get("DBPORT"))
 
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
+AWS_SESSION_TOKEN = ''
 
 
 bucket_name = 'bucket-k8s-final-project'
-key = 'bg1.jpg'
+key = 'bg2.jpg'
 
 # Create a connection to the MySQL database
 db_conn = connections.Connection(
@@ -55,9 +56,8 @@ COLOR = random.choice(["red", "green", "blue", "blue2", "darkblue", "pink", "lim
 
 # Fetching images
 
-s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
-
-image_location = 'images'
+s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY, aws_session_token=AWS_SESSION_TOKEN)
+image_location = "static/images"
 if not os.path.exists(image_location):
     os.makedirs(image_location)
 
@@ -70,7 +70,7 @@ s3.download_file(bucket_name, key, local_imgpath)
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    return render_template('addemp.html', color=color_codes[COLOR], bg_img=local_imgpath)
+    return render_template('addemp.html')
 
 @app.route("/about", methods=['GET','POST'])
 def about():
