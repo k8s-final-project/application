@@ -60,10 +60,10 @@ jobs:
           export AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}"
           export AWS_SESSION_TOKEN="${{secrets.AWS_SESSION_TOKEN}}"
 
-          docker run -d -p 8081:8080 --name myapp -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e DBUSER=$DBUSER -e DBPWD=$DBPWD -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN $REGISTRY/my_app:v1
+          docker run -d -p 8081:81 --name myapp -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e DBUSER=$DBUSER -e DBPWD=$DBPWD -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN $REGISTRY/my_app:v1
           docker ps
           echo "Pause for 10 seconds to let container start"
           sleep 10
           docker logs myapp
-          curl localhost:81 -vvv
+          curl localhost:8081 -vvv
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
