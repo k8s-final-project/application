@@ -36,6 +36,7 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f Dockerfile_mysql .
           # unit test
           docker run -d --name mydb -e MYSQL_ROOT_PASSWORD=pw $REGISTRY/my_db:v1
+          docker inspect mydb
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: Build, tag, and push WebServer image to Amazon ECR
@@ -60,4 +61,5 @@ jobs:
           echo "Pause for 10 seconds to let container start"
           sleep 10
           curl localhost:8081 -vvv
+          docker logs myapp
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
