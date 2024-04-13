@@ -21,7 +21,7 @@ AWS_SESSION_TOKEN = ''
 
 
 bucket_name = 'bucket-k8s-final-project'
-key = 'bg2.jpg'
+key = 'bg1.jpg'
 
 # Create a connection to the MySQL database
 db_conn = connections.Connection(
@@ -74,7 +74,7 @@ def home():
 
 @app.route("/about", methods=['GET','POST'])
 def about():
-    return render_template('about.html', color=color_codes[COLOR])
+    return render_template('about.html')
     
 @app.route("/addemp", methods=['POST'])
 def AddEmp():
@@ -98,11 +98,11 @@ def AddEmp():
         cursor.close()
 
     print("all modification done...")
-    return render_template('addempoutput.html', name=emp_name, color=color_codes[COLOR])
+    return render_template('addempoutput.html', name=emp_name)
 
 @app.route("/getemp", methods=['GET', 'POST'])
 def GetEmp():
-    return render_template("getemp.html", color=color_codes[COLOR])
+    return render_template("getemp.html")
 
 
 @app.route("/fetchdata", methods=['GET','POST'])
@@ -131,7 +131,7 @@ def FetchData():
         cursor.close()
 
     return render_template("getempoutput.html", id=output["emp_id"], fname=output["first_name"],
-                           lname=output["last_name"], interest=output["primary_skills"], location=output["location"], color=color_codes[COLOR])
+                           lname=output["last_name"], interest=output["primary_skills"], location=output["location"])
 
 if __name__ == '__main__':
     

@@ -3,7 +3,8 @@
 <head>
 <style>
         body {
-            background-image: url("{{ bg_img }}");
+            background-image: url('{{ url_for('static', filename='images/bg.jpg') }}');
+            background-size: cover;
         }
 </style>
 <center>
