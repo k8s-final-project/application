@@ -3,6 +3,7 @@ from pymysql import connections
 import os
 import random
 import argparse
+import boto3
 
 
 app = Flask(__name__)
@@ -13,6 +14,13 @@ DBPWD = os.environ.get("DBPWD") or "passwors"
 DATABASE = os.environ.get("DATABASE") or "employees"
 COLOR_FROM_ENV = os.environ.get('APP_COLOR') or "lime"
 DBPORT = int(os.environ.get("DBPORT"))
+
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+
+
+bucket_name = 'bucket-k8s-final-project'
+key = 'bg1.jpg'
 
 # Create a connection to the MySQL database
 db_conn = connections.Connection(
@@ -45,9 +53,24 @@ SUPPORTED_COLORS = ",".join(color_codes.keys())
 COLOR = random.choice(["red", "green", "blue", "blue2", "darkblue", "pink", "lime"])
 
 
+# Fetching images
+
+s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+
+image_location = 'images'
+if not os.path.exists(image_location):
+    os.makedirs(image_location)
+
+local_imgpath = os.path.join(image_location, 'bg.jpg')
+s3.download_file(bucket_name, key, local_imgpath)
+
+
+
+
+
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    return render_template('addemp.html', color=color_codes[COLOR])
+    return render_template('addemp.html', color=color_codes[COLOR], bg_img=local_imgpath)
 
 @app.route("/about", methods=['GET','POST'])
 def about():
